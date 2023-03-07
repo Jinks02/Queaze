@@ -12,6 +12,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Queaze",
+      theme: ThemeData(
+        primarySwatch: Colors.deepOrange,
+        fontFamily: "Nunito"
+      ),
       home: SplashScreen(),
     );
   }
