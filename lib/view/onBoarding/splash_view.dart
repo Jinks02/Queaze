@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:queaze/view/get_started_view.dart';
+import 'package:queaze/view/onBoarding/get_started_view.dart';
 import 'package:video_player/video_player.dart';
 
 import 'on_boarding_view.dart';
