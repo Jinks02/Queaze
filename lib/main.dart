@@ -1,7 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:queaze/view/splash_view.dart';
+import 'package:queaze/view/onBoarding/splash_view.dart';
 
 void main() {
   runApp(MyApp());

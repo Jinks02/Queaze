@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:queaze/view/onBoarding/get_started_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -68,7 +69,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
                 TextButton(
                   onPressed: () {
-                    // todo: skip all onboarding screens
+                    Navigator.of(context).pushReplacement(_createRoute());
                   },
                   child: const Text(
                     'Skip',
@@ -83,9 +84,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             ),
             RawMaterialButton(
               onPressed: () {
-                _pageController.nextPage(
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.easeInOut);
+                if (_pageController.page == 2) {
+                  Navigator.of(context).push(_createRoute());
+                } else {
+                  _pageController.nextPage(
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.easeInOut);
+                }
               },
               elevation: 2.0,
               highlightElevation: 8.0,
@@ -102,6 +107,25 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => GetStarted(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeIn;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
   }
 }
