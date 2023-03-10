@@ -1,5 +1,3 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:queaze/view/onBoarding/splash_view.dart';
 
@@ -12,12 +10,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Queaze",
-      theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
-        fontFamily: "Nunito"
-      ),
+      theme: ThemeData(primarySwatch: Colors.deepOrange, fontFamily: "Nunito"),
       home: SplashScreen(),
     );
   }
-
 }

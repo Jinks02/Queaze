@@ -18,7 +18,7 @@ class _Frame2ViewState extends State<Frame2View> {
           children: [
             const SizedBox(height: 30.0),
             SizedBox(
-              height: 400,
+              height: 300,
               child: SvgPicture.asset(
                 "assets/images/login_page.svg", // todo: fix frame 2 image error
               ),
