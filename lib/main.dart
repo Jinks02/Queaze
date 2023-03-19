@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Queaze",
-      theme: ThemeData(primarySwatch: Colors.deepOrange, fontFamily: "Nunito"),
+      theme: ThemeData(primarySwatch: Colors.deepOrange, primaryColor: const Color.fromRGBO(255, 145, 77, 1), fontFamily: "Nunito"),
       home: SplashScreen(),
     );
   }
