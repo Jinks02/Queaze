@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:queaze/view/core_screens/home_screen.dart';
 import 'package:queaze/view/login/signup.dart';
 
 class LoginPage extends StatefulWidget {
@@ -174,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        //TODO: navigate to create new account page
+                        Navigator.of(context).push(MaterialPageRoute(builder: (builder) => HomeScreen()));
                       },
                       child: const Text(
                         "Create new account",
