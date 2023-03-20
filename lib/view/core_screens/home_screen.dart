@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -8,6 +9,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  _launchURLApp() async {
+    var url = Uri.parse('https://cred.club/');
+    if (true) { //canLaunch() function is returning false
+      await launchUrl(url, mode: LaunchMode.inAppWebView);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20,
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                _launchURLApp();
+              },
               style: ButtonStyle(
                 overlayColor:
                     MaterialStateProperty.all<Color>(Colors.transparent),
