@@ -38,11 +38,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   smooth_page_indicator: ^1.0.1
   intl_phone_field: ^3.1.0
-  lottie: ^2.2.0
   firebase_core: ^2.8.0
   firebase_auth: ^4.3.0
   cloud_firestore: ^4.4.5
+  google_sign_in: ^6.0.2
   url_launcher: ^6.1.10
+  lottie: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -72,7 +73,6 @@ flutter:
   assets:
     - assets/videos/
     - assets/images/
-    - assets/lottie/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -86,12 +86,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Nunito
-      fonts:
-        - asset: assets/fonts/Nunito-Regular.ttf
-    - family: SF_Pro
-      fonts:
-        - asset: assets/fonts/SourceSansPro-Regular.ttf
+     - family: Nunito
+       fonts:
+         - asset: assets/fonts/Nunito-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
