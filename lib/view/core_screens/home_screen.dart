@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:glassmorphism/glassmorphism.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../models/store.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -9,10 +12,55 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var stores = [
+    Store(
+      'Matahaari Club',
+      'https://picsum.photos/250?image=9',
+      'Open 5pm to 9pm',
+      'Rs 2500 for two',
+      'https://cred.club/',
+    ),
+    Store(
+      'Wallmart',
+      'https://upload.wikimedia.org/wikipedia/commons/3/31/Walmart_Home_Office.jpg',
+      'Open 5pm to 9pm',
+      'Rs 2500 for two',
+      'https://cred.club/',
+    ),
+    Store(
+      '24 Hours',
+      'https://picsum.photos/250?image=10',
+      'Open 5pm to 9pm',
+      'Rs 2500 for two',
+      'https://cred.club/',
+    ),
+    Store(
+      'Great Store',
+      'https://picsum.photos/250?image=3',
+      'Open 5pm to 9pm',
+      'Rs 2500 for two',
+      'https://cred.club/',
+    ),
+    Store(
+      'PUBG Store',
+      'https://picsum.photos/250?image=4',
+      'Open 5pm to 9pm',
+      'Rs 2500 for two',
+      'https://cred.club/',
+    ),
+    Store(
+      'Seven Eleven',
+      'https://picsum.photos/250?image=5',
+      'Open 5pm to 9pm',
+      'Rs 2500 for two',
+      'https://cred.club/',
+    )
+  ];
 
-  _launchURLApp() async {
-    var url = Uri.parse('https://cred.club/');
-    if (true) { //canLaunch() function is returning false
+  _launchURLApp(String storeUrl) async {
+    var url = Uri.parse(storeUrl);
+    if (true) {
+      //canLaunch() function is returning false
       await launchUrl(url, mode: LaunchMode.inAppWebView);
     } else {
       throw 'Could not launch $url';
@@ -60,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             TextButton(
               onPressed: () {
-                _launchURLApp();
+                _launchURLApp('https://cred.club/');
               },
               style: ButtonStyle(
                 overlayColor:
@@ -146,13 +194,16 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 270,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 10,
+                  itemCount: stores.length,
                   itemBuilder: (context, index) {
+                    var store = stores[index];
                     return Padding(
                       padding: const EdgeInsets.only(
                           right: 8, top: 8, bottom: 8, left: 2),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          _launchURLApp(store.storeUrl);
+                        },
                         child: Container(
                           width: 165,
                           decoration: BoxDecoration(
@@ -193,9 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: 2,
                                         ),
                                       ),
-                                      child: const Center(
-                                        child: Text("Image"),
-                                      ),
+                                      child: Image.network(store.imageUrl),
                                     ),
                                     Positioned(
                                       bottom: 0,
@@ -207,14 +256,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                             bottomRight: Radius.circular(10),
                                           ),
                                         ),
-                                        height: 50,
+                                        height: 40,
                                         width: 150,
-                                        child: const Center(
-                                          child: Text(
-                                            "Timings",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                        child: GlassmorphicFlexContainer(
+                                          borderRadius: 0,
+                                          blur: 3,
+                                          border: 0,
+                                          linearGradient: LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                Color(0xFFffffff)
+                                                    .withOpacity(0.1),
+                                                Color(0xFFFFFFFF)
+                                                    .withOpacity(0.05),
+                                              ],
+                                              stops: [
+                                                0.1,
+                                                1,
+                                              ]),
+                                          borderGradient: LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Color(0xFFffffff)
+                                                  .withOpacity(0.5),
+                                              Color((0xFFFFFFFF))
+                                                  .withOpacity(0.5),
+                                            ],
                                           ),
+                                          child: Center(
+                                              child: Text(store.timings)),
                                         ),
                                       ),
                                     ),
@@ -224,13 +296,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              const Align(
+                              Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 8.0),
                                   child: Text(
-                                    'Matahaari club',
-                                    style: TextStyle(
+                                    store.storeName,
+                                    style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -244,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: Text(
-                                    'Rs. 2500 for two',
+                                    store.avgPrice,
                                     style: TextStyle(
                                         fontSize: 10,
                                         color: Colors.grey[700],
@@ -290,120 +362,145 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               height: 270,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                          right: 8, top: 8, bottom: 8, left: 2),
-                      child: InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 165,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 20.0),
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      height: 150,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.4),
-                                            spreadRadius: 2,
-                                            blurRadius: 5,
-                                            offset: const Offset(0,
-                                                3), // changes position of shadow
-                                          ),
-                                        ],
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                          color: Colors.black,
-                                          width: 2,
-                                        ),
-                                      ),
-                                      child: const Center(
-                                        child: Text("Image"),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 0,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.orange.withOpacity(0.4),
-                                          borderRadius: const BorderRadius.only(
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10),
-                                          ),
-                                        ),
-                                        height: 50,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: stores.length,
+                    itemBuilder: (context, index) {
+                      var store = stores[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            right: 8, top: 8, bottom: 8, left: 2),
+                        child: InkWell(
+                          onTap: () {
+                            _launchURLApp(store.storeUrl);
+                          },
+                          child: Container(
+                            width: 165,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: const Offset(
+                                      0, 3), // changes position of shadow
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20.0),
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                        height: 150,
                                         width: 150,
-                                        child: const Center(
-                                          child: Text(
-                                            "Timings",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: Colors.grey.withOpacity(0.4),
+                                              spreadRadius: 2,
+                                              blurRadius: 5,
+                                              offset: const Offset(0,
+                                                  3), // changes position of shadow
+                                            ),
+                                          ],
+                                          borderRadius: BorderRadius.circular(10),
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: Image.network(store.imageUrl),
+                                      ),
+                                      Positioned(
+                                        bottom: 0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.orange.withOpacity(0.4),
+                                            borderRadius: const BorderRadius.only(
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10),
+                                            ),
+                                          ),
+                                          height: 40,
+                                          width: 150,
+                                          child: GlassmorphicFlexContainer(
+                                            borderRadius: 0,
+                                            blur: 3,
+                                            border: 0,
+                                            linearGradient: LinearGradient(
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                                colors: [
+                                                  Color(0xFFffffff)
+                                                      .withOpacity(0.1),
+                                                  Color(0xFFFFFFFF)
+                                                      .withOpacity(0.05),
+                                                ],
+                                                stops: [
+                                                  0.1,
+                                                  1,
+                                                ]),
+                                            borderGradient: LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                Color(0xFFffffff)
+                                                    .withOpacity(0.5),
+                                                Color((0xFFFFFFFF))
+                                                    .withOpacity(0.5),
+                                              ],
+                                            ),
+                                            child: Center(
+                                                child: Text(store.timings)),
                                           ),
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      store.storeName,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              const Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 8.0),
-                                  child: Text(
-                                    'Matahaari club',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Text(
-                                    'Rs. 2500 for two',
-                                    style: TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.grey[700],
-                                        fontWeight: FontWeight.w400),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Text(
+                                      store.avgPrice,
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.grey[700],
+                                          fontWeight: FontWeight.w400),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+
             ),
             const SizedBox(
               // todo: extract the recurring widget as another class later on ie. this sized box, and the following row,sized box and container with list view
@@ -438,13 +535,16 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 270,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 10,
+                  itemCount: stores.length,
                   itemBuilder: (context, index) {
+                    var store = stores[index];
                     return Padding(
                       padding: const EdgeInsets.only(
                           right: 8, top: 8, bottom: 8, left: 2),
                       child: InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          _launchURLApp(store.storeUrl);
+                        },
                         child: Container(
                           width: 165,
                           decoration: BoxDecoration(
@@ -485,9 +585,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: 2,
                                         ),
                                       ),
-                                      child: const Center(
-                                        child: Text("Image"),
-                                      ),
+                                      child: Image.network(store.imageUrl),
                                     ),
                                     Positioned(
                                       bottom: 0,
@@ -499,14 +597,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                             bottomRight: Radius.circular(10),
                                           ),
                                         ),
-                                        height: 50,
+                                        height: 40,
                                         width: 150,
-                                        child: const Center(
-                                          child: Text(
-                                            "Timings",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                        child: GlassmorphicFlexContainer(
+                                          borderRadius: 0,
+                                          blur: 3,
+                                          border: 0,
+                                          linearGradient: LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                Color(0xFFffffff)
+                                                    .withOpacity(0.1),
+                                                Color(0xFFFFFFFF)
+                                                    .withOpacity(0.05),
+                                              ],
+                                              stops: [
+                                                0.1,
+                                                1,
+                                              ]),
+                                          borderGradient: LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Color(0xFFffffff)
+                                                  .withOpacity(0.5),
+                                              Color((0xFFFFFFFF))
+                                                  .withOpacity(0.5),
+                                            ],
                                           ),
+                                          child: Center(
+                                              child: Text(store.timings)),
                                         ),
                                       ),
                                     ),
@@ -516,13 +637,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(
                                 height: 15,
                               ),
-                              const Align(
+                              Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 8.0),
                                   child: Text(
-                                    'Matahaari club',
-                                    style: TextStyle(
+                                    store.storeName,
+                                    style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -536,7 +657,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: Text(
-                                    'Rs. 2500 for two',
+                                    store.avgPrice,
                                     style: TextStyle(
                                         fontSize: 10,
                                         color: Colors.grey[700],
