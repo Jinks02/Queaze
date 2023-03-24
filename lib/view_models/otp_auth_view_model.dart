@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:queaze/view_models/services/auth_service.dart';
+import 'package:queaze/view_models/services/auth_service_impl.dart';
 
 class OtpAuthViewModel extends ChangeNotifier {
-  AuthService authService = AuthService();
+  AuthService authService = AuthServiceImpl();
 
   OtpAuthViewModel({required this.authService});
 
