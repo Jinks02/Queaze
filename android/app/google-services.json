@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "728363352290",
+    "project_id": "queaze-cad65",
+    "storage_bucket": "queaze-cad65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:728363352290:android:2017da51426c3dc6d51ebb",
+        "android_client_info": {
+          "package_name": "com.example.queaze"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728363352290-hg6ae3r2j86ah7kqhs9qhh9tp0jjhnil.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.queaze",
+            "certificate_hash": "62e34013924772db7a570232b074efe8c52948b1"
+          }
+        },
+        {
+          "client_id": "728363352290-ud4g4ofg17lmt098u52ie8tb981br48c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa66pBrYP-QWDxsuXj-7HKcqgaeWfv2qk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728363352290-lh9s7466eai0483ijakj6kguao1li0df.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
