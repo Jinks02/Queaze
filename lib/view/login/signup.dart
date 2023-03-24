@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:queaze/view/login/login.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -67,7 +68,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 TextFormField(
                   keyboardType: TextInputType.name,
                   decoration:
-                  const InputDecoration(hintText: "Enter your name"),
+                      const InputDecoration(hintText: "Enter your name"),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter your name";
@@ -92,7 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   decoration:
-                  const InputDecoration(hintText: "Enter your email"),
+                      const InputDecoration(hintText: "Enter your email"),
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter your email";
@@ -147,31 +148,31 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 const SizedBox(height: 15.0),
                 Align(
-                  alignment: Alignment.topLeft,
-                  child: RichText(
-                    text: TextSpan(
-                      style: defaultStyle,
-                      children: <TextSpan>[
-                        const TextSpan(text: 'By continuing you agree to our'),
-                        TextSpan(
-                            text: 'Terms of Service \n',
-                            style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                print('Terms of Service');
-                              }),
-                        const TextSpan(text: 'and '),
-                        TextSpan(
-                            text: 'Privacy Policy',
-                            style: linkStyle,
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                print('Privacy Policy"');
-                              }),
-                      ],
-                    ),
-                  )
-                ),
+                    alignment: Alignment.topLeft,
+                    child: RichText(
+                      text: TextSpan(
+                        style: defaultStyle,
+                        children: <TextSpan>[
+                          const TextSpan(
+                              text: 'By continuing you agree to our'),
+                          TextSpan(
+                              text: 'Terms of Service \n',
+                              style: linkStyle,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  print('Terms of Service');
+                                }),
+                          const TextSpan(text: 'and '),
+                          TextSpan(
+                              text: 'Privacy Policy',
+                              style: linkStyle,
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  print('Privacy Policy"');
+                                }),
+                        ],
+                      ),
+                    )),
                 const SizedBox(height: 15.0),
                 Center(
                   child: Container(
@@ -180,7 +181,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       style: ElevatedButton.styleFrom(
                           shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(10)))),
+                                  BorderRadius.all(Radius.circular(10)))),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
@@ -198,6 +199,32 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                     ),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Already have an account?",
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (builder) => LoginPage()));
+                        },
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

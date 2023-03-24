@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:queaze/view/core_screens/home_screen.dart';
 import 'package:queaze/view/login/signup.dart';
 
 class LoginPage extends StatefulWidget {
@@ -65,8 +64,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
-                decoration:
-                    const InputDecoration(hintText: "Enter your email"),
+                decoration: const InputDecoration(hintText: "Enter your email"),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "Please enter your email";
@@ -124,7 +122,8 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.topRight,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (builder) => SignUpPage()));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (builder) => SignUpPage()));
                   },
                   child: const Text(
                     "Forgot password?",
@@ -175,7 +174,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(builder: (builder) => HomeScreen()));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (builder) => SignUpPage()));
                       },
                       child: const Text(
                         "Create new account",
