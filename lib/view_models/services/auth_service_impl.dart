@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:queaze/view_models/services/auth_service.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -19,6 +21,7 @@ class AuthServiceImpl extends AuthService {
         email: email,
         password: password,
       );
+      debugPrint("sign up success");
       return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -40,6 +43,8 @@ class AuthServiceImpl extends AuthService {
         email: email,
         password: password,
       );
+      debugPrint("log in success");
+
       return userCredential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -77,54 +82,41 @@ class AuthServiceImpl extends AuthService {
   }
 
   @override
-  Future<void> signInWithPhoneNumber(String phoneNumber) async {
-    verificationCompleted(AuthCredential phoneAuthCredential) async {
-      await _auth.signInWithCredential(phoneAuthCredential);
-    }
+  String signInWithPhoneNumber(String phoneNumber) {
+    String verificationId = 'abc';
 
-    verificationFailed(FirebaseAuthException authException) {
-      debugPrint(
-          'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
-      throw authException;
-    }
-
-    codeSent(String verificationId, int? resendToken) async {
-      return verificationId;
-    }
-
-    codeAutoRetrievalTimeout(String verificationId) {
-      debugPrint(
-          "Verification code timeout. Verification Id : $verificationId");
-      throw TimeoutException('Time out');
-    }
-
-    try {
-      await _auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        verificationCompleted: verificationCompleted,
-        verificationFailed: verificationFailed,
-        codeSent: codeSent,
-        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
-        timeout: const Duration(seconds: 20),
-      );
-    } catch (e) {
-      rethrow;
-    }
+    _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        await _auth.signInWithCredential(credential);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        print(e.message);
+      },
+      codeSent: (String id, int? resendToken) {
+        verificationId = id;
+        log("code sent");
+        log(verificationId.toString());
+        log(id.isEmpty.toString()); // false
+        log(verificationId.isEmpty.toString()); // false
+      },
+      codeAutoRetrievalTimeout: (String id) {
+        log("code time out");
+      },
+    );
+    log("log before return statement");
+    return verificationId;
   }
 
   @override
-  Future<UserCredential> signInWithOTP(
+  Future<UserCredential?> signInWithOTP(
       String verificationId, String smsCode) async {
-    final AuthCredential credential = PhoneAuthProvider.credential(
+    final PhoneAuthCredential credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
       smsCode: smsCode,
     );
 
-    try {
-      return await _auth.signInWithCredential(credential);
-    } catch (e) {
-      rethrow;
-    }
+    return await _auth.signInWithCredential(credential);
   }
 
   @override

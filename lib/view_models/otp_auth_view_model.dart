@@ -1,42 +1,49 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:queaze/view_models/services/auth_service.dart';
 import 'package:queaze/view_models/services/auth_service_impl.dart';
 
 class OtpAuthViewModel extends ChangeNotifier {
   AuthService authService = AuthServiceImpl();
 
-  OtpAuthViewModel({required this.authService});
+  // OtpAuthViewModel({required this.authService});
 
-  String phoneNumber = '';
   String verificationId = '';
-  String smsCode = '';
-  String errorMessage = '';
 
-  User? get currentUser => authService.currentUser;
+  bool _isLoading = false;
 
-  Future<void> verifyPhoneNumber() async {
-    try {
-      await authService.signInWithPhoneNumber(phoneNumber);
-    } catch (e) {
-      errorMessage = e.toString();
-    }
+  bool get isLoading => _isLoading;
+
+  void setLoading(bool value) {
+    _isLoading = value;
     notifyListeners();
   }
 
-  Future<void> signInWithPhoneNumber() async {
+  Future<String?> verifyPhoneNumber(String phoneNumber) async {
     try {
-      final UserCredential? userCredential =
-          await authService.signInWithOTP(verificationId, smsCode);
-      if (userCredential != null) {
-        // success
-      } else {
-        errorMessage = 'Sign in failed';
-      }
+      setLoading(true);
+      verificationId = authService.signInWithPhoneNumber(phoneNumber);
+      log("view model ver id= ${verificationId.isEmpty}");
+      setLoading(false);
     } catch (e) {
-      errorMessage = e.toString();
+      print(e.toString());
     }
-    notifyListeners();
+    return verificationId;
+  }
+
+  Future<UserCredential?> signInWithOTP(
+      String verificationId, String smsCode) async {
+    final UserCredential? userCredential;
+    try {
+      setLoading(true);
+      userCredential = await authService.signInWithOTP(verificationId, smsCode);
+      setLoading(false);
+      return userCredential;
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> signOut() async {

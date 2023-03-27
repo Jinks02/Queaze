@@ -7,9 +7,9 @@ abstract class AuthService {
 
   Future<UserCredential?> signInWithGoogle();
 
-  Future<void> signInWithPhoneNumber(String phoneNumber);
+  String signInWithPhoneNumber(String phoneNumber);
 
-  Future<UserCredential> signInWithOTP(String verificationId, String smsCode);
+  Future<UserCredential?> signInWithOTP(String verificationId, String smsCode);
 
   Future<void> signOut();
 
