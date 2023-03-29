@@ -3,10 +3,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:queaze/view/core_screens/home_screen.dart';
 import 'package:queaze/view/login/login.dart';
 import 'package:queaze/view_models/sign_up_view_model.dart';
-
-import '../otp_screens/frame2_view.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -217,15 +216,17 @@ class _SignUpPageState extends State<SignUpPage> {
                               // todo: find an alternative to scaffold messenger
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
+                                      backgroundColor: Colors.orange,
                                       content: Text("Sign up success")));
                               Navigator.push(
                                   (context),
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          const Frame2View()));
+                                          const HomeScreen()));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
+                                      backgroundColor: Colors.orange,
                                       content: Text("Sign up failed")));
                             }
                           }

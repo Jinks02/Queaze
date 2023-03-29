@@ -2,10 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:queaze/view/core_screens/home_screen.dart';
 import 'package:queaze/view/login/signup.dart';
 import 'package:queaze/view_models/log_in_view_model.dart';
-
-import '../otp_screens/frame2_view.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -174,14 +173,17 @@ class _LoginPageState extends State<LoginPage> {
                             // todo: find an alternative to scaffold messenger
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
+                                    backgroundColor: Colors.orange,
                                     content: Text("log in success")));
                             Navigator.push(
                                 (context),
                                 MaterialPageRoute(
-                                    builder: (context) => const Frame2View()));
+                                    builder: (context) => const HomeScreen()));
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text("log in failed")));
+                                const SnackBar(
+                                    backgroundColor: Colors.orange,
+                                    content: Text("log in failed")));
                           }
                         }
                       },
@@ -220,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                             builder: (builder) => const SignUpPage()));
                       },
                       child: const Text(
-                        "Create new account",
+                        "Create account",
                         style: TextStyle(
                           fontSize: 16,
                         ),
