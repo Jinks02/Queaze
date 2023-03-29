@@ -3,12 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:queaze/view/core_screens/home_screen.dart';
 import 'package:queaze/view/login/login.dart';
 import 'package:queaze/view/login/signup.dart';
-import 'package:queaze/view/otp_screens/otp_phone_number_view.dart';
 import 'package:queaze/view_models/sign_in_with_google_view_model.dart';
-
-import '../otp_screens/frame2_view.dart';
 
 class GetStarted extends StatelessWidget {
   @override
@@ -57,7 +55,7 @@ class GetStarted extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => SignUpPage(),
+                            builder: (context) => const SignUpPage(),
                           ),
                         );
                       },
@@ -84,7 +82,7 @@ class GetStarted extends StatelessWidget {
                         print("Button Clicked");
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (builder) => LoginPage(),
+                            builder: (builder) => const LoginPage(),
                           ),
                         );
                       },
@@ -105,10 +103,10 @@ class GetStarted extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 30.0, bottom: 48),
                     child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 5),
-                      width: 200,
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      width: 100,
                       decoration: BoxDecoration(
-                        color: Color(0xffE3DEDE),
+                        color: const Color(0xffE3DEDE),
                         borderRadius: BorderRadius.circular(40),
                       ),
                       child: Row(
@@ -132,34 +130,47 @@ class GetStarted extends StatelessWidget {
                                             // todo: find an alternative to scaffold messenger
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
+                                                    backgroundColor:
+                                                        Colors.orange,
                                                     content: Text(
                                                         "google sign in success")));
                                             Navigator.push(
                                                 (context),
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const Frame2View()));
+                                                        const HomeScreen()));
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
+                                                    backgroundColor:
+                                                        Colors.orange,
                                                     content: Text(
                                                         "google sign in failed")));
                                           }
                                         },
                                         child: value.isLoading
-                                            ? const CircularProgressIndicator(
-                                                color: Colors.white,
+                                            ? const Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 28.0),
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                ),
                                               )
-                                            : SvgPicture.asset(
-                                                'assets/images/google_logo.svg',
-                                                width: 40,
-                                                height: 40,
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 28.0),
+                                                child: SvgPicture.asset(
+                                                  'assets/images/google_logo.svg',
+                                                  width: 40,
+                                                  height: 40,
+                                                ),
                                               ),
                                       ),
                                     );
                                   })
                                 : Padding(
-                                    padding: EdgeInsets.only(right: 28),
+                                    padding: const EdgeInsets.only(right: 28),
                                     child: InkWell(
                                       onTap: () {
                                         debugPrint("apple icon clicked");
@@ -172,27 +183,27 @@ class GetStarted extends StatelessWidget {
                                     ),
                                   ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 28.0),
-                            child: InkWell(
-                              onTap: () {
-                                debugPrint("phone icon clicked");
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => OtpPhoneNumberView(),
-                                  ),
-                                );
-                              },
-                              child: const CircleAvatar(
-                                backgroundColor: Colors.orange,
-                                radius: 22,
-                                child: Icon(
-                                  Icons.phone,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.only(left: 28.0),
+                          //   child: InkWell(
+                          //     onTap: () {
+                          //       debugPrint("phone icon clicked");
+                          //       Navigator.of(context).push(
+                          //         MaterialPageRoute(
+                          //           builder: (context) => OtpPhoneNumberView(),
+                          //         ),
+                          //       );
+                          //     },
+                          //     child: const CircleAvatar(
+                          //       backgroundColor: Colors.orange,
+                          //       radius: 22,
+                          //       child: Icon(
+                          //         Icons.phone,
+                          //         color: Colors.white,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
