@@ -1,8 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:queaze/view/login/signup.dart';
+import 'package:queaze/view_models/log_in_view_model.dart';
+
+import '../otp_screens/frame2_view.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -12,8 +19,18 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _passwordVisible = false;
 
-  String _email = "";
-  String _password = "";
+  // String _email = "";
+  // String _password = "";
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               TextFormField(
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(hintText: "Enter your email"),
                 validator: (value) {
@@ -73,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 onSaved: (value) {
                   if (value!.isNotEmpty) {
-                    _email = value;
+                    _emailController.text = value;
                   }
                 },
               ),
@@ -87,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               TextFormField(
+                controller: _passwordController,
                 obscureText: !_passwordVisible,
                 decoration: InputDecoration(
                   //labelText: "Password",
@@ -113,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 onSaved: (value) {
                   if (value!.isNotEmpty) {
-                    _password = value;
+                    _passwordController.text = value;
                   }
                 },
               ),
@@ -122,8 +141,8 @@ class _LoginPageState extends State<LoginPage> {
                 alignment: Alignment.topRight,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (builder) => SignUpPage()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (builder) => const SignUpPage()));
                   },
                   child: const Text(
                     "Forgot password?",
@@ -134,33 +153,56 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              Center(
-                child: Container(
-                  width: 250,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10)))),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        //TODO: perform login with _email and _password
-                      }
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        "Login Now",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+              Consumer<LoginViewModel>(builder: (context, value, child) {
+                return Center(
+                  child: Container(
+                    width: 250,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)))),
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+                          //TODO: perform login with _email and _password
+                          UserCredential? userCredential =
+                              await value.signInWithEmailAndPassword(
+                                  _emailController.text,
+                                  _passwordController.text);
+                          if (userCredential != null) {
+                            // todo: find an alternative to scaffold messenger
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("log in success")));
+                            Navigator.push(
+                                (context),
+                                MaterialPageRoute(
+                                    builder: (context) => const Frame2View()));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("log in failed")));
+                          }
+                        }
+                      },
+                      child: value.isLoading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                "Login Now",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                     ),
                   ),
-                ),
-              ),
+                );
+              }),
               const SizedBox(height: 20.0),
               Center(
                 child: Row(
@@ -175,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (builder) => SignUpPage()));
+                            builder: (builder) => const SignUpPage()));
                       },
                       child: const Text(
                         "Create new account",

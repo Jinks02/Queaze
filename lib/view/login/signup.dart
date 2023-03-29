@@ -1,9 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:queaze/view/login/login.dart';
+import 'package:queaze/view_models/sign_up_view_model.dart';
+
+import '../otp_screens/frame2_view.dart';
 
 class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
+
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
@@ -13,14 +20,25 @@ class _SignUpPageState extends State<SignUpPage> {
 
   bool _passwordVisible = false;
 
-  String _email = "";
-  String _password = "";
-  String _name = "";
+  // String _email = "";
+  // String _password = "";
+  // String _name = "";
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextStyle defaultStyle = TextStyle(color: Colors.grey, fontSize: 14);
-    TextStyle linkStyle = TextStyle(color: Colors.green);
+    TextStyle defaultStyle = const TextStyle(color: Colors.grey, fontSize: 14);
+    TextStyle linkStyle = const TextStyle(color: Colors.green);
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -66,6 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 TextFormField(
+                  controller: _usernameController,
                   keyboardType: TextInputType.name,
                   decoration:
                       const InputDecoration(hintText: "Enter your name"),
@@ -77,7 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                   onSaved: (value) {
                     if (value!.isNotEmpty) {
-                      _name = value;
+                      _usernameController.text = value;
                     }
                   },
                 ),
@@ -91,6 +110,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 TextFormField(
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration:
                       const InputDecoration(hintText: "Enter your email"),
@@ -102,7 +122,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                   onSaved: (value) {
                     if (value!.isNotEmpty) {
-                      _email = value;
+                      _emailController.text = value;
                     }
                   },
                 ),
@@ -116,6 +136,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 TextFormField(
+                  controller: _passwordController,
                   obscureText: !_passwordVisible,
                   decoration: InputDecoration(
                     //labelText: "Password",
@@ -142,7 +163,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   },
                   onSaved: (value) {
                     if (value!.isNotEmpty) {
-                      _password = value;
+                      _passwordController.text = value;
                     }
                   },
                 ),
@@ -174,33 +195,59 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     )),
                 const SizedBox(height: 15.0),
-                Center(
-                  child: Container(
-                    width: 250,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)))),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          //TODO: perform login with _email and _password
-                        }
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          "Register Now",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                Consumer<SignUpViewModel>(builder: (context, value, child) {
+                  return Center(
+                    child: Container(
+                      width: 250,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)))),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            //TODO: perform login with _email and _password
+                            UserCredential? userCredential =
+                                await value.signUpWithEmailAndPassword(
+                                    _emailController.text,
+                                    _passwordController.text);
+
+                            if (userCredential != null) {
+                              // todo: find an alternative to scaffold messenger
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("Sign up success")));
+                              Navigator.push(
+                                  (context),
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Frame2View()));
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("Sign up failed")));
+                            }
+                          }
+                        },
+                        child: value.isLoading
+                            ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : const Padding(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  "Register Now",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 const SizedBox(height: 10.0),
                 Center(
                   child: Row(

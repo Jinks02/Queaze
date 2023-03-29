@@ -1,9 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:queaze/view/login/login.dart';
 import 'package:queaze/view/login/signup.dart';
 import 'package:queaze/view/otp_screens/otp_phone_number_view.dart';
+import 'package:queaze/view_models/sign_in_with_google_view_model.dart';
+
+import '../otp_screens/frame2_view.dart';
 
 class GetStarted extends StatelessWidget {
   @override
@@ -113,19 +118,46 @@ class GetStarted extends StatelessWidget {
                             data: ThemeData(platform: defaultTargetPlatform),
                             child: defaultTargetPlatform ==
                                     TargetPlatform.android
-                                ? Padding(
-                                    padding: const EdgeInsets.only(right: 28.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        debugPrint("google icon clicked");
-                                      },
-                                      child: SvgPicture.asset(
-                                        'assets/images/google_logo.svg',
-                                        width: 40,
-                                        height: 40,
+                                ? Consumer<SignInWithGoogleViewModel>(
+                                    builder: (context, value, child) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 28.0),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          debugPrint("google icon clicked");
+                                          UserCredential? userCredential =
+                                              await value.signInWithGoogle();
+                                          if (userCredential != null) {
+                                            // todo: find an alternative to scaffold messenger
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        "google sign in success")));
+                                            Navigator.push(
+                                                (context),
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const Frame2View()));
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        "google sign in failed")));
+                                          }
+                                        },
+                                        child: value.isLoading
+                                            ? const CircularProgressIndicator(
+                                                color: Colors.white,
+                                              )
+                                            : SvgPicture.asset(
+                                                'assets/images/google_logo.svg',
+                                                width: 40,
+                                                height: 40,
+                                              ),
                                       ),
-                                    ),
-                                  )
+                                    );
+                                  })
                                 : Padding(
                                     padding: EdgeInsets.only(right: 28),
                                     child: InkWell(
