@@ -24,7 +24,7 @@ class OtpAuthViewModel extends ChangeNotifier {
   Future<String?> verifyPhoneNumber(String phoneNumber) async {
     try {
       setLoading(true);
-      verificationId = authService.signInWithPhoneNumber(phoneNumber);
+      await authService.signInWithPhoneNumber(phoneNumber).then((value) => verificationId = value);
       log("view model ver id= ${verificationId.isEmpty}");
       setLoading(false);
     } catch (e) {
