@@ -1,5 +1,8 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:queaze/view/onBoarding/get_started_view.dart';
+import 'package:queaze/view/core_screens/home_screen.dart';
 import 'package:video_player/video_player.dart';
 
 import 'on_boarding_view.dart';
@@ -13,6 +16,8 @@ class _SplashScreenState extends State<SplashScreen> {
   late VideoPlayerController _controller;
   bool _isVideoInitialized = false;
 
+  final auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
@@ -25,15 +30,34 @@ class _SplashScreenState extends State<SplashScreen> {
             _controller.play();
           });
 
-    _controller.addListener(() {
-      if (_controller.value.position == _controller.value.duration) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (BuildContext context) => OnBoardingScreen(),
-          ),
-        );
-      }
-    });
+    checkUserLogin();
+  }
+
+  void checkUserLogin() {
+    if (auth.currentUser == null) {
+      log("user does not exists");
+      _controller.addListener(() {
+        if (_controller.value.position == _controller.value.duration) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (BuildContext context) => OnBoardingScreen(),
+            ),
+          );
+        }
+      });
+    } else {
+      log("user exists");
+      log(auth.currentUser?.email.toString() ?? "no email");
+      _controller.addListener(() {
+        if (_controller.value.position == _controller.value.duration) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (BuildContext context) => const HomeScreen(),
+            ),
+          );
+        }
+      });
+    }
   }
 
   @override
@@ -55,12 +79,15 @@ class _SplashScreenState extends State<SplashScreen> {
               child: VideoPlayer(_controller),
             ),
           Container(
-              transform: Matrix4.translationValues(0.0, -50.0, 0.0),
-              child: Text("Skip the queue, pay with ease!",
-              style: TextStyle(fontSize: 18,
-              fontFamily: "Nunito",
-              fontWeight: FontWeight.bold),) //Image.asset('assets/app_logo.png'),
-              ),
+            transform: Matrix4.translationValues(0.0, -50.0, 0.0),
+            child: const Text(
+              "Skip the queue, pay with ease!",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontFamily: "Nunito",
+                  fontWeight: FontWeight.bold),
+            ), //Image.asset('assets/app_logo.png'),
+          ),
         ],
       ),
     );
