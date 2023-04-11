@@ -82,10 +82,10 @@ class AuthServiceImpl extends AuthService {
   }
 
   @override
-  String signInWithPhoneNumber(String phoneNumber) {
-    String verificationId = 'abc';
+  Future<String> signInWithPhoneNumber(String phoneNumber) async {
+    Completer<String> completer = Completer<String>();
 
-    _auth.verifyPhoneNumber(
+    await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
         await _auth.signInWithCredential(credential);
@@ -94,17 +94,15 @@ class AuthServiceImpl extends AuthService {
         print(e.message);
       },
       codeSent: (String id, int? resendToken) {
-        verificationId = id;
-        log("code sent");
-        log(verificationId.toString());
-        log(id.isEmpty.toString()); // false
-        log(verificationId.isEmpty.toString()); // false
+        completer.complete(id);
       },
       codeAutoRetrievalTimeout: (String id) {
-        log("code time out");
+        print("code time out");
       },
     );
-    log("log before return statement");
+
+    String verificationId = await completer.future;
+    print("verificationId: $verificationId");
     return verificationId;
   }
 

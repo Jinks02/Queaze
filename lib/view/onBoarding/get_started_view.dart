@@ -8,6 +8,8 @@ import 'package:queaze/view/login/login.dart';
 import 'package:queaze/view/login/signup.dart';
 import 'package:queaze/view_models/sign_in_with_google_view_model.dart';
 
+import '../otp_screens/otp_phone_number_view.dart';
+
 class GetStarted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -104,7 +106,7 @@ class GetStarted extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 30.0, bottom: 48),
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 5),
-                      width: 100,
+                      width: 200,
                       decoration: BoxDecoration(
                         color: const Color(0xffE3DEDE),
                         borderRadius: BorderRadius.circular(40),
@@ -183,27 +185,27 @@ class GetStarted extends StatelessWidget {
                                     ),
                                   ),
                           ),
-                          // Padding(
-                          //   padding: const EdgeInsets.only(left: 28.0),
-                          //   child: InkWell(
-                          //     onTap: () {
-                          //       debugPrint("phone icon clicked");
-                          //       Navigator.of(context).push(
-                          //         MaterialPageRoute(
-                          //           builder: (context) => OtpPhoneNumberView(),
-                          //         ),
-                          //       );
-                          //     },
-                          //     child: const CircleAvatar(
-                          //       backgroundColor: Colors.orange,
-                          //       radius: 22,
-                          //       child: Icon(
-                          //         Icons.phone,
-                          //         color: Colors.white,
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 28.0),
+                            child: InkWell(
+                              onTap: () {
+                                debugPrint("phone icon clicked");
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => OtpPhoneNumberView(),
+                                  ),
+                                );
+                              },
+                              child: const CircleAvatar(
+                                backgroundColor: Colors.orange,
+                                radius: 22,
+                                child: Icon(
+                                  Icons.phone,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),

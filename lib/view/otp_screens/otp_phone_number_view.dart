@@ -28,47 +28,47 @@ class _OtpPhoneNumberViewState extends State<OtpPhoneNumberView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 30.0),
-              SizedBox(
-                height: 350,
-                child: SvgPicture.asset(
-                  "assets/images/login_page.svg",
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const SizedBox(height: 30.0),
+            SizedBox(
+              height: 350,
+              child: SvgPicture.asset(
+                "assets/images/login_page.svg",
+              ),
+            ),
+            const Text(
+              "Enter your Phone Number",
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              child: IntlPhoneField(
+                controller: _phoneNumberController,
+                onCountryChanged: (country) {
+                  setState(() {
+                    countryCode = '+${country.dialCode}';
+                  });
+                },
+                decoration: const InputDecoration(
+                  hintText: 'Phone Number',
                 ),
+                initialCountryCode: 'IN',
+                initialValue: countryCode,
+                onChanged: (phone) {
+                  debugPrint(phone.completeNumber);
+                },
               ),
-              const Text(
-                "Enter your Phone Number",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 40,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: IntlPhoneField(
-                  controller: _phoneNumberController,
-                  onCountryChanged: (country) {
-                    setState(() {
-                      countryCode = '+${country.dialCode}';
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    hintText: 'Phone Number',
-                  ),
-                  initialCountryCode: 'IN',
-                  initialValue: countryCode,
-                  onChanged: (phone) {
-                    debugPrint(phone.completeNumber);
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-        floatingActionButton:
-            Consumer<OtpAuthViewModel>(builder: (context, value, child) {
+      ),
+      floatingActionButton: Consumer<OtpAuthViewModel>(
+        builder: (context, value, child) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 30.0, right: 10),
             child: FloatingActionButton(
@@ -94,6 +94,8 @@ class _OtpPhoneNumberViewState extends State<OtpPhoneNumberView> {
                   : const Icon(Icons.arrow_forward_ios),
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 }
