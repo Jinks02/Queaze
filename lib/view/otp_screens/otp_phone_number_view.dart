@@ -32,11 +32,21 @@ class _OtpPhoneNumberViewState extends State<OtpPhoneNumberView> {
         child: Column(
           children: [
             const SizedBox(height: 30.0),
-            SizedBox(
-              height: 350,
-              child: SvgPicture.asset(
-                "assets/images/login_page.svg",
-              ),
+            Stack(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Image.asset(
+                    'assets/images/phone_left.png'
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Image.asset(
+                      'assets/images/phone_right.png'
+                  ),
+                )
+              ],
             ),
             const Text(
               "Enter your Phone Number",
@@ -75,9 +85,6 @@ class _OtpPhoneNumberViewState extends State<OtpPhoneNumberView> {
               onPressed: () async {
                 verificationId = (await value.verifyPhoneNumber(
                     countryCode + _phoneNumberController.text))!;
-                log(countryCode + _phoneNumberController.text);
-                log(verificationId.isEmpty.toString());
-                log(verificationId);
                 if (value.isLoading == false) {
                   Navigator.of(context).push(
                     MaterialPageRoute(

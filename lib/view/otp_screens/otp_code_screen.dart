@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:queaze/view/core_screens/home_screen.dart';
 import 'package:queaze/view_models/otp_auth_view_model.dart';
 
 import 'frame2_view.dart';
@@ -141,7 +142,7 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
                   Navigator.push(
                       (context),
                       MaterialPageRoute(
-                          builder: (context) => const Frame2View()));
+                          builder: (context) => const HomeScreen()));
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("otp auth failed")));

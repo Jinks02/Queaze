@@ -50,8 +50,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 30.0),
                 SizedBox(
                   height: 300,
-                  child: SvgPicture.asset(
-                    "assets/images/login_page.svg",
+                  child: Image.asset(
+                    "assets/images/signup_image.png",
                   ),
                 ),
                 const Align(

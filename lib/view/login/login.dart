@@ -45,8 +45,8 @@ class _LoginPageState extends State<LoginPage> {
               Flexible(
                 fit: FlexFit.tight,
                 child: Container(
-                  child: SvgPicture.asset(
-                    "assets/images/login_page.svg",
+                  child: Image.asset(
+                    "assets/images/login_image.png",
                   ),
                 ),
               ),
