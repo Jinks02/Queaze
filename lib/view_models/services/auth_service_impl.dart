@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,18 +7,27 @@ import 'package:queaze/view_models/services/auth_service.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthServiceImpl extends AuthService {
+
+  AuthServiceImpl._privateConstructor();
+  static final AuthServiceImpl _instance = AuthServiceImpl._privateConstructor();
+
+  factory AuthServiceImpl() {
+    return _instance;
+  }
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final User? currentUser = FirebaseAuth.instance.currentUser;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
-  Future<UserCredential?> signUp(String email, String password) async {
+  Future<UserCredential?> signUp(String email, String password, String name) async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      userCredential.user?.updateDisplayName(name);
       debugPrint("sign up success");
       return userCredential;
     } on FirebaseAuthException catch (e) {
@@ -74,6 +81,10 @@ class AuthServiceImpl extends AuthService {
     try {
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
+      //Adding name and photo to firebase
+      userCredential.user?.updateDisplayName(googleUser.displayName);
+      userCredential.user?.updatePhotoURL(googleUser.photoUrl);
+
       return userCredential;
     } on FirebaseAuthException catch (e) {
       debugPrint(e.toString());

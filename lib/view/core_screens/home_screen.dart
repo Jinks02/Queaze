@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism/glassmorphism.dart';
+import 'package:provider/provider.dart';
+import 'package:queaze/view_models/home_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/store.dart';
@@ -92,10 +95,12 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            const Text(
-              'Hi Nurency !',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
+            Consumer<HomeViewModel>(builder: (context, value, child) {
+              return Text(
+                'Hi ${value.getUsername()}',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              );
+            }),
             const SizedBox(
               height: 20,
             ),
