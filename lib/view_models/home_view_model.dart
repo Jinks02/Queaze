@@ -41,7 +41,8 @@ class HomeViewModel extends ChangeNotifier {
   Future<Placemark> getAddress() async {
     Position position = await determinePosition();
     var address = await placemarkFromCoordinates(position.latitude, position.longitude);
-    location = address[0].country ?? '';
+    location = address[0].subLocality ?? '';
+    location = location + ', ' + address[0].locality! ?? '';
     notifyListeners();
     return address[0];
   }

@@ -1,4 +1,4 @@
-
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _launchURLApp(String storeUrl) async {
     var url = Uri.parse(storeUrl);
+    log("Launched");
     if (true) {
       //canLaunch() function is returning false
       await launchUrl(url, mode: LaunchMode.inAppWebView);
@@ -78,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     var viewModel = Provider.of<HomeViewModel>(context, listen: false);
     viewModel.getAddress();
+    print('init');
     super.initState();
   }
 
@@ -97,6 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Consumer<HomeViewModel>(builder: (context, value, child) {
+                  value.determinePosition();
                   value.getAddress();
                   return Text(
                     value.location,
@@ -127,8 +130,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Consumer<HomeViewModel>(builder: (context, value, child) {
               return TextButton(
-                onPressed: () async {
-
+                onPressed: () {
+                  print('clicked');
+                  value.getAddress();
                 },
                 style: ButtonStyle(
                   overlayColor:
