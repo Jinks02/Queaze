@@ -1,5 +1,9 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:glassmorphism/glassmorphism.dart';
 import 'package:provider/provider.dart';
 import 'package:queaze/view_models/home_view_model.dart';
@@ -71,6 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    var viewModel = Provider.of<HomeViewModel>(context, listen: false);
+    viewModel.getAddress();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
@@ -84,11 +95,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Beliaghata, East Kolkata',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                ),
+              children: [
+                Consumer<HomeViewModel>(builder: (context, value, child) {
+                  value.getAddress();
+                  return Text(
+                    value.location,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  );
+                }),
                 CircleAvatar()
               ],
             ),
@@ -111,28 +125,30 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            TextButton(
-              onPressed: () {
-                _launchURLApp('https://cred.club/');
-              },
-              style: ButtonStyle(
-                overlayColor:
-                    MaterialStateProperty.all<Color>(Colors.transparent),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.orange),
-                    borderRadius: BorderRadius.circular(18.0),
+            Consumer<HomeViewModel>(builder: (context, value, child) {
+              return TextButton(
+                onPressed: () async {
+
+                },
+                style: ButtonStyle(
+                  overlayColor:
+                  MaterialStateProperty.all<Color>(Colors.transparent),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.orange),
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
                   ),
                 ),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.0),
-                child: Text(
-                  'Know more about us',
-                  style: TextStyle(color: Colors.grey),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Text(
+                    'Know more about us',
+                    style: TextStyle(color: Colors.grey),
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
             const SizedBox(
               height: 20,
             ),
