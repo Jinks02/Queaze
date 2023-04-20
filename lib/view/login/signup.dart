@@ -50,8 +50,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 30.0),
                 SizedBox(
                   height: 300,
-                  child: SvgPicture.asset(
-                    "assets/images/login_page.svg",
+                  child: Image.asset(
+                    "assets/images/signup_image.png",
                   ),
                 ),
                 const Align(
@@ -206,11 +206,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
+                            print(_usernameController.text);
                             //TODO: perform login with _email and _password
                             UserCredential? userCredential =
                                 await value.signUpWithEmailAndPassword(
                                     _emailController.text,
-                                    _passwordController.text);
+                                    _passwordController.text,
+                                    _usernameController.text);
 
                             if (userCredential != null) {
                               // todo: find an alternative to scaffold messenger

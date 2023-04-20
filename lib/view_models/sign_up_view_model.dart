@@ -9,10 +9,10 @@ class SignUpViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   Future<UserCredential?> signUpWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, String name) async {
     _isLoading = true;
     notifyListeners();
-    UserCredential? userCredential = await _authService.signUp(email, password);
+    UserCredential? userCredential = await _authService.signUp(email, password, name);
     _isLoading = false;
     notifyListeners();
     return userCredential;

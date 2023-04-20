@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queaze/view/onBoarding/splash_view.dart';
+import 'package:queaze/view_models/home_view_model.dart';
 import 'package:queaze/view_models/log_in_view_model.dart';
 import 'package:queaze/view_models/otp_auth_view_model.dart';
 import 'package:queaze/view_models/sign_in_with_apple_view_model.dart';
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(
+            create: (context) => HomeViewModel()
+        ),
         ChangeNotifierProvider(
           create: (context) => LoginViewModel(),
         ),

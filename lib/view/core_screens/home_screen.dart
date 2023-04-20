@@ -1,5 +1,12 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:glassmorphism/glassmorphism.dart';
+import 'package:provider/provider.dart';
+import 'package:queaze/view_models/home_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/store.dart';
@@ -59,12 +66,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _launchURLApp(String storeUrl) async {
     var url = Uri.parse(storeUrl);
+    log("Launched");
     if (true) {
       //canLaunch() function is returning false
       await launchUrl(url, mode: LaunchMode.inAppWebView);
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  @override
+  void initState() {
+    var viewModel = Provider.of<HomeViewModel>(context, listen: false);
+    viewModel.getAddress();
+    print('init');
+    super.initState();
   }
 
   @override
@@ -81,21 +97,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                Text(
-                  'Beliaghata, East Kolkata',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-                ),
+              children: [
+                Consumer<HomeViewModel>(builder: (context, value, child) {
+                  value.determinePosition();
+                  value.getAddress();
+                  return Text(
+                    value.location,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                  );
+                }),
                 CircleAvatar()
               ],
             ),
             const SizedBox(
               height: 20,
             ),
-            const Text(
-              'Hi Nurency !',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
+            Consumer<HomeViewModel>(builder: (context, value, child) {
+              return Text(
+                'Hi ${value.getUsername()}',
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              );
+            }),
             const SizedBox(
               height: 20,
             ),
@@ -106,28 +128,31 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            TextButton(
-              onPressed: () {
-                _launchURLApp('https://cred.club/');
-              },
-              style: ButtonStyle(
-                overlayColor:
-                    MaterialStateProperty.all<Color>(Colors.transparent),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.orange),
-                    borderRadius: BorderRadius.circular(18.0),
+            Consumer<HomeViewModel>(builder: (context, value, child) {
+              return TextButton(
+                onPressed: () {
+                  print('clicked');
+                  value.getAddress();
+                },
+                style: ButtonStyle(
+                  overlayColor:
+                  MaterialStateProperty.all<Color>(Colors.transparent),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.orange),
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
                   ),
                 ),
-              ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.0),
-                child: Text(
-                  'Know more about us',
-                  style: TextStyle(color: Colors.grey),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Text(
+                    'Know more about us',
+                    style: TextStyle(color: Colors.grey),
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
             const SizedBox(
               height: 20,
             ),
