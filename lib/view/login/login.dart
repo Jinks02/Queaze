@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:queaze/view/core_screens/home_screen.dart';
 import 'package:queaze/view/login/signup.dart';
-import 'package:queaze/view_models/log_in_view_model.dart';
+
+import '../../view_models/log_in_view_model.dart';
+import '../core_screens/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -38,16 +38,12 @@ class _LoginPageState extends State<LoginPage> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+          child: ListView(
+            children: [
               const SizedBox(height: 30.0),
-              Flexible(
-                fit: FlexFit.tight,
-                child: Container(
-                  child: Image.asset(
-                    "assets/images/login_image.png",
-                  ),
+              Container(
+                child: Image.asset(
+                  "assets/images/login_image.png",
                 ),
               ),
               const Align(
