@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:queaze/view/core_screens/home_screen.dart';
 import 'package:queaze/view_models/otp_auth_view_model.dart';
 
-import 'frame2_view.dart';
-
 class OtpCodeScreen extends StatefulWidget {
   const OtpCodeScreen({Key? key}) : super(key: key);
 
@@ -40,21 +38,26 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            padding: const EdgeInsets.only(top: 20, left: 25),
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              // Add your onPressed handler here
-            },
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          padding: const EdgeInsets.only(top: 20, left: 25),
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
           ),
+          onPressed: () {
+            // Add your onPressed handler here
+          },
         ),
-        body: SingleChildScrollView(
+      ),
+      body: OrientationBuilder(builder: (context, orientation) {
+        final alignment = orientation == Orientation.portrait
+            ? Alignment.centerRight
+            : Alignment.center;
+
+        return SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(left: 25.0),
             child: Column(
@@ -109,7 +112,7 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
                 Padding(
                   padding: const EdgeInsets.only(right: 15.0),
                   child: Align(
-                    alignment: Alignment.centerRight,
+                    alignment: alignment,
                     child: InkWell(
                       onTap: () {
                         // todo: resend code functionality
@@ -124,9 +127,10 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
               ],
             ),
           ),
-        ),
-        floatingActionButton:
-            Consumer<OtpAuthViewModel>(builder: (context, value, child) {
+        );
+      }),
+      floatingActionButton: Consumer<OtpAuthViewModel>(
+        builder: (context, value, child) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 30.0, right: 10),
             child: FloatingActionButton(
@@ -156,6 +160,8 @@ class _OtpCodeScreenState extends State<OtpCodeScreen> {
                   : const Icon(Icons.arrow_forward_ios),
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 }
