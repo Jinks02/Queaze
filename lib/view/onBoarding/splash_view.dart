@@ -69,27 +69,53 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (_isVideoInitialized)
-            AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controller),
-            ),
-          Container(
-            transform: Matrix4.translationValues(0.0, -50.0, 0.0),
-            child: const Text(
-              "Skip the queue, pay with ease!",
-              style: TextStyle(
-                  fontSize: 18,
-                  fontFamily: "Nunito",
-                  fontWeight: FontWeight.bold),
-            ), //Image.asset('assets/app_logo.png'),
-          ),
-        ],
-      ),
-    );
+        backgroundColor: Colors.white,
+        body: OrientationBuilder(builder: (context, orientation) {
+          if (orientation == Orientation.landscape) {
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (_isVideoInitialized)
+                    AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
+                    ),
+                  Container(
+                    transform: Matrix4.translationValues(0.0, -50.0, 0.0),
+                    child: const Text(
+                      "Skip the queue, pay with ease!",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontFamily: "Nunito",
+                          fontWeight: FontWeight.bold),
+                    ), //Image.asset('assets/app_logo.png'),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (_isVideoInitialized)
+                  AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  ),
+                Container(
+                  transform: Matrix4.translationValues(0.0, -50.0, 0.0),
+                  child: const Text(
+                    "Skip the queue, pay with ease!",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: "Nunito",
+                        fontWeight: FontWeight.bold),
+                  ), //Image.asset('assets/app_logo.png'),
+                ),
+              ],
+            );
+          }
+        }));
   }
 }
